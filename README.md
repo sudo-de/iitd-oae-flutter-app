@@ -8,24 +8,24 @@ A comprehensive Flutter application for the Office of Accessible Education (OAE)
 
 | Login Screen | Student Dashboard | Book Ride | Class Schedule |
 |--------------|-------------------|-----------|----------------|
-| ![Login Screen](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.55.58.png) | ![Student Dashboard](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.55.43.png) | ![Book Ride](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.55.37.png) | ![Class Schedule](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.55.30.png) |
+| ![Login Screen](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.55.58.png) | ![Student Dashboard](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.52.07.png) | ![Book Ride](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.53.10.png) | ![Class Schedule](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.53.56.png) |
 
 | Driver Dashboard | Admin Panel | Complaints | User Management |
 |------------------|-------------|------------|-----------------|
-| ![Driver Dashboard](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.54.55.png) | ![Admin Panel](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.54.48.png) | ![Complaints](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.54.34.png) | ![User Management](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.54.11.png) |
+| ![Driver Dashboard](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.54.34.png) | ![Admin Panel](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.55.30.png) | ![Complaints](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.54.06.png) | ![User Management](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.55.37.png) |
 
-| Ride History | Earnings | Profile | Settings |
-|--------------|----------|---------|----------|
-| ![Ride History](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.54.06.png) | ![Earnings](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.53.56.png) | ![Profile](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.53.10.png) | ![Settings](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.53.02.png) |
+| Ride History | Earnings | Student ID Profile |
+|--------------|----------|--------------------|
+| ![Ride History](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.54.48.png) | ![Earnings](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.54.55.png) | ![Profile](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.53.02.png) |
 
-| Notifications | Analytics | Welcome Screen |
-|---------------|-----------|----------------|
-| ![Notifications](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.52.54.png) | ![Analytics](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.52.07.png) | ![Welcome Screen](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-16%20at%2022.19.31.png) |
+| Menu list | Analytics | My complaint | 
+|---------------|-----------|--------------|
+| ![Notifications](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.52.54.png) | ![Analytics](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.55.43.png) | ![My complaint](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.54.11.png) |
 
 ### Live Demo
-- **Web Demo**: [Try the app online](https://iitd-oae-b9687.web.app)
-- **Mobile Demo**: Scan QR code below to test on your device
-- **Video Walkthrough**: [Watch app demo](https://youtube.com/watch?v=your-video-id)
+- **Web Demo**: [Coming Soon]() 🔄
+- **Mobile Demo**: QR Code - Coming Soon 📱
+- **Video Walkthrough**: [Coming Soon]() 🎥
 
 ## Features
 
