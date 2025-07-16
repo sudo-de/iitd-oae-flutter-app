@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "736731624790",
+    "project_id": "iitd-oae-b9687",
+    "storage_bucket": "iitd-oae-b9687.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:736731624790:android:070400158e0fceb682d2f7",
+        "android_client_info": {
+          "package_name": "com.example.flutter_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYvyNn_7S_2Km_CkxTICrfMr8h-DvqSnM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:736731624790:android:b1dc207c39bf84f482d2f7",
+        "android_client_info": {
+          "package_name": "com.iitd.oae"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYvyNn_7S_2Km_CkxTICrfMr8h-DvqSnM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
