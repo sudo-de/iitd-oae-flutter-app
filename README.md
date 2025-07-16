@@ -6,130 +6,21 @@ A comprehensive Flutter application for the Office of Accessible Education (OAE)
 
 ### Screenshots
 
-<div align="center">
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; max-width: 1200px; margin: 0 auto;">
-    <div style="text-align: center;">
-      <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.55.58.png" 
-           width="200" height="400" 
-           alt="Login Screen" 
-           loading="lazy"
-           style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.2s ease;">
-      <p style="margin-top: 8px; font-weight: 500; color: #666;">Login Screen</p>
-    </div>
-    <div style="text-align: center;">
-      <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.55.43.png" 
-           width="200" height="400" 
-           alt="Student Dashboard" 
-           loading="lazy"
-           style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.2s ease;">
-      <p style="margin-top: 8px; font-weight: 500; color: #666;">Student Dashboard</p>
-    </div>
-    <div style="text-align: center;">
-      <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.55.37.png" 
-           width="200" height="400" 
-           alt="Book Ride" 
-           loading="lazy"
-           style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.2s ease;">
-      <p style="margin-top: 8px; font-weight: 500; color: #666;">Book Ride</p>
-    </div>
-    <div style="text-align: center;">
-      <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.55.30.png" 
-           width="200" height="400" 
-           alt="Class Schedule" 
-           loading="lazy"
-           style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.2s ease;">
-      <p style="margin-top: 8px; font-weight: 500; color: #666;">Class Schedule</p>
-    </div>
-    <div style="text-align: center;">
-      <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.54.55.png" 
-           width="200" height="400" 
-           alt="Driver Dashboard" 
-           loading="lazy"
-           style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.2s ease;">
-      <p style="margin-top: 8px; font-weight: 500; color: #666;">Driver Dashboard</p>
-    </div>
-    <div style="text-align: center;">
-      <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.54.48.png" 
-           width="200" height="400" 
-           alt="Admin Panel" 
-           loading="lazy"
-           style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.2s ease;">
-      <p style="margin-top: 8px; font-weight: 500; color: #666;">Admin Panel</p>
-    </div>
-    <div style="text-align: center;">
-      <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.54.34.png" 
-           width="200" height="400" 
-           alt="Complaints" 
-           loading="lazy"
-           style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.2s ease;">
-      <p style="margin-top: 8px; font-weight: 500; color: #666;">Complaints</p>
-    </div>
-    <div style="text-align: center;">
-      <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.54.11.png" 
-           width="200" height="400" 
-           alt="User Management" 
-           loading="lazy"
-           style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.2s ease;">
-      <p style="margin-top: 8px; font-weight: 500; color: #666;">User Management</p>
-    </div>
-    <div style="text-align: center;">
-      <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.54.06.png" 
-           width="200" height="400" 
-           alt="Ride History" 
-           loading="lazy"
-           style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.2s ease;">
-      <p style="margin-top: 8px; font-weight: 500; color: #666;">Ride History</p>
-    </div>
-    <div style="text-align: center;">
-      <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.53.56.png" 
-           width="200" height="400" 
-           alt="Earnings" 
-           loading="lazy"
-           style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.2s ease;">
-      <p style="margin-top: 8px; font-weight: 500; color: #666;">Earnings</p>
-    </div>
-    <div style="text-align: center;">
-      <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.53.10.png" 
-           width="200" height="400" 
-           alt="Profile" 
-           loading="lazy"
-           style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.2s ease;">
-      <p style="margin-top: 8px; font-weight: 500; color: #666;">Profile</p>
-    </div>
-    <div style="text-align: center;">
-      <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.53.02.png" 
-           width="200" height="400" 
-           alt="Settings" 
-           loading="lazy"
-           style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.2s ease;">
-      <p style="margin-top: 8px; font-weight: 500; color: #666;">Settings</p>
-    </div>
-    <div style="text-align: center;">
-      <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.52.54.png" 
-           width="200" height="400" 
-           alt="Notifications" 
-           loading="lazy"
-           style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.2s ease;">
-      <p style="margin-top: 8px; font-weight: 500; color: #666;">Notifications</p>
-    </div>
-    <div style="text-align: center;">
-      <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.52.07.png" 
-           width="200" height="400" 
-           alt="Analytics" 
-           loading="lazy"
-           style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.2s ease;">
-      <p style="margin-top: 8px; font-weight: 500; color: #666;">Analytics</p>
-    </div>
-    <div style="text-align: center;">
-      <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-16 at 22.19.31.png" 
-           width="200" height="400" 
-           alt="Welcome Screen" 
-           loading="lazy"
-           style="border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.2s ease;">
-      <p style="margin-top: 8px; font-weight: 500; color: #666;">Welcome Screen</p>
-    </div>
-  </div>
-</div>
+| Login Screen | Student Dashboard | Book Ride | Class Schedule |
+|--------------|-------------------|-----------|----------------|
+| ![Login Screen](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.55.58.png) | ![Student Dashboard](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.55.43.png) | ![Book Ride](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.55.37.png) | ![Class Schedule](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.55.30.png) |
+
+| Driver Dashboard | Admin Panel | Complaints | User Management |
+|------------------|-------------|------------|-----------------|
+| ![Driver Dashboard](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.54.55.png) | ![Admin Panel](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.54.48.png) | ![Complaints](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.54.34.png) | ![User Management](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.54.11.png) |
+
+| Ride History | Earnings | Profile | Settings |
+|--------------|----------|---------|----------|
+| ![Ride History](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.54.06.png) | ![Earnings](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.53.56.png) | ![Profile](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.53.10.png) | ![Settings](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.53.02.png) |
+
+| Notifications | Analytics | Welcome Screen |
+|---------------|-----------|----------------|
+| ![Notifications](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.52.54.png) | ![Analytics](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.52.07.png) | ![Welcome Screen](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-16%20at%2022.19.31.png) |
 
 ### Live Demo
 - **Web Demo**: [Try the app online](https://iitd-oae-b9687.web.app)
