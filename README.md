@@ -1,4 +1,4 @@
-# IIT Delhi OAE - Transportation and Academic Management System
+# IIT Delhi OAE Flutter App
 
 A comprehensive Flutter application for the Office of Accessible Education (OAE) at IIT Delhi, providing transportation services and academic management features for students with disabilities.
 
