@@ -12,36 +12,36 @@
     "platforms": {
       "android": {
         "default": {
-          "projectId": "iitd-oae-b9687",
-          "appId": "1:736731624790:android:b1dc207c39bf84f482d2f7",
+          "projectId": "YOUR_PROJECT_ID",
+          "appId": "YOUR_ANDROID_APP_ID",
           "fileOutput": "android/app/google-services.json"
         }
       },
       "ios": {
         "default": {
-          "projectId": "iitd-oae-b9687",
-          "appId": "1:736731624790:ios:fb9005a81b3fc57482d2f7",
+          "projectId": "YOUR_PROJECT_ID",
+          "appId": "YOUR_IOS_APP_ID",
           "uploadDebugSymbols": false,
           "fileOutput": "ios/Runner/GoogleService-Info.plist"
         }
       },
       "macos": {
         "default": {
-          "projectId": "iitd-oae-b9687",
-          "appId": "1:736731624790:ios:b5c0ab98d5d07bd482d2f7",
+          "projectId": "YOUR_PROJECT_ID",
+          "appId": "YOUR_MACOS_APP_ID",
           "uploadDebugSymbols": false,
           "fileOutput": "macos/Runner/GoogleService-Info.plist"
         }
       },
       "dart": {
         "lib/firebase_options.dart": {
-          "projectId": "iitd-oae-b9687",
+          "projectId": "YOUR_PROJECT_ID",
           "configurations": {
-            "android": "1:736731624790:android:b1dc207c39bf84f482d2f7",
-            "ios": "1:736731624790:ios:fb9005a81b3fc57482d2f7",
-            "macos": "1:736731624790:ios:b5c0ab98d5d07bd482d2f7",
-            "web": "1:736731624790:web:3fc00ef412addba682d2f7",
-            "windows": "1:736731624790:web:5b79b49f4becc92282d2f7"
+            "android": "YOUR_ANDROID_APP_ID",
+            "ios": "YOUR_IOS_APP_ID",
+            "macos": "YOUR_MACOS_APP_ID",
+            "web": "YOUR_WEB_APP_ID",
+            "windows": "YOUR_WINDOWS_APP_ID"
           }
         }
       }

@@ -1,149 +1,155 @@
-# IIT Delhi OAE Flutter App
+# IIT Delhi OAE - Transportation and Academic Management System
 
-A comprehensive Flutter application for the Office of Accessible Education (OAE) at IIT Delhi, providing transportation and academic management features for students, drivers, and administrators.
+A comprehensive Flutter application for the Office of Accessible Education (OAE) at IIT Delhi, providing transportation services and academic management features for students with disabilities.
 
-## 📱 App Preview
+## 🚀 Features
 
-### Screenshots
+- **Student Dashboard**: Book rides, view class schedules, submit complaints
+- **Driver Dashboard**: Accept rides, view earnings, manage ride history
+- **Admin Panel**: User management, complaint handling, analytics
+- **Real-time Notifications**: Push notifications for ride updates
+- **Firebase Integration**: Authentication, Firestore database, Cloud Storage
+- **Cross-platform**: Android, iOS, Web, macOS, Windows
 
-| Login Screen | Student Dashboard | Book Ride | Class Schedule |
-|--------------|-------------------|-----------|----------------|
-| ![Login Screen](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.55.58.png) | ![Student Dashboard](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.52.07.png) | ![Book Ride](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.53.10.png) | ![Class Schedule](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.53.56.png) |
+## 📱 Screenshots
 
-| Driver Dashboard | Admin Panel | Complaints | User Management |
-|------------------|-------------|------------|-----------------|
-| ![Driver Dashboard](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.54.34.png) | ![Admin Panel](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.55.30.png) | ![Complaints](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.54.06.png) | ![User Management](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.55.37.png) |
+Check out the `screenshots/` directory for app previews.
 
-| Ride History | Earnings | Student ID Profile |
-|--------------|----------|--------------------|
-| ![Ride History](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.54.48.png) | ![Earnings](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.54.55.png) | ![Profile](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.53.02.png) |
-
-| Menu list | Analytics | My complaint | 
-|---------------|-----------|--------------|
-| ![Notifications](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.52.54.png) | ![Analytics](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.55.43.png) | ![My complaint](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.54.11.png) |
-
-### Live Demo
-- **Web Demo**: [Coming Soon]() 🔄
-- **Mobile Demo**: QR Code - Coming Soon 📱
-- **Video Walkthrough**: [Coming Soon]() 🎥
-
-## Features
-
-### Student Features
-- **Book Rides**: Schedule transportation services
-- **My Rides**: View ride history and status
-- **Class Schedule**: Manage personal class schedule with add, edit, delete functionality
-- **Complaints**: Submit and track complaints
-- **Profile Management**: Update personal information
-
-### Driver Features
-- **Dashboard**: View assigned rides and earnings
-- **Ride Management**: Accept, complete, and manage rides
-- **Earnings Tracking**: Monitor income and performance
-
-### Admin Features
-- **User Management**: Manage students and drivers
-- **Ride Oversight**: Monitor and manage all rides
-- **Complaint Resolution**: Handle and resolve complaints
-- **System Administration**: Overall system management
-
-## Class Schedule Feature
-
-The class schedule feature allows students to:
-- **Add Classes**: Create new class entries with name, instructor, time, room, and day
-- **Edit Classes**: Modify existing class details
-- **Delete Classes**: Remove classes from the schedule
-- **View by Day**: Organize classes by day of the week
-- **Time Conflict Prevention**: System prevents scheduling conflicts on the same day and time
-
-### Technical Implementation
-- **Model**: `ClassSchedule` with comprehensive data structure
-- **Service**: `ClassScheduleService` for Firebase Firestore operations
-- **UI**: Modern, responsive interface with day-based navigation
-- **Validation**: Form validation and time slot availability checking
-
-## 🚀 Quick Start
+## 🔧 Setup Instructions
 
 ### Prerequisites
-- Flutter SDK (3.0 or higher)
+
+- Flutter SDK (^3.8.1)
 - Dart SDK
-- Android Studio / VS Code
-- Firebase project setup
+- Firebase project
+- Android Studio / Xcode (for mobile development)
 
-### Installation
+### 1. Clone the Repository
+
 ```bash
-# Clone the repository
-git clone https://github.com/sudo-de/iitd-oae-flutter-app.git
-
-# Navigate to project directory
-cd iitd-oae-flutter-app
-
-# Install dependencies
-flutter pub get
-
-# Run the app
-flutter run
+git clone <your-repo-url>
+cd flutter_app
 ```
 
-### Firebase Setup
-1. Create a Firebase project
-2. Add Android and iOS apps
-3. Download and add configuration files:
-   - `google-services.json` for Android
-   - `GoogleService-Info.plist` for iOS
-4. Enable Firestore Database
-5. Set up Authentication
+### 2. Install Dependencies
 
-## 📱 Platform Support
+```bash
+flutter pub get
+```
 
-- ✅ Android (API 21+)
-- ✅ iOS (12.0+)
-- ✅ Web
-- ✅ macOS
-- ✅ Windows
-- ✅ Linux
+### 3. Firebase Configuration
 
-## 🛠️ Tech Stack
+**⚠️ IMPORTANT: You need to configure Firebase before running the app**
 
-- **Framework**: Flutter 3.x
-- **Language**: Dart
-- **Backend**: Firebase Firestore
-- **Authentication**: Firebase Auth
-- **State Management**: Provider
-- **UI Components**: Material Design 3
-- **Notifications**: Firebase Cloud Messaging
+#### Step 1: Create Firebase Project
+1. Go to [Firebase Console](https://console.firebase.google.com/)
+2. Create a new project or use existing one
+3. Enable Authentication, Firestore, Storage, and Cloud Messaging
 
-## 📊 App Statistics
+#### Step 2: Configure Firebase Options
+1. Replace placeholder values in `lib/firebase_options.dart`:
+   ```dart
+   // Replace these with your actual Firebase configuration
+   apiKey: 'YOUR_API_KEY',
+   appId: 'YOUR_APP_ID',
+   messagingSenderId: 'YOUR_SENDER_ID',
+   projectId: 'YOUR_PROJECT_ID',
+   ```
 
-- **Downloads**: 500+ students
-- **Active Users**: 200+ daily
-- **Rides Completed**: 1000+
-- **Response Time**: <2 seconds
-- **Uptime**: 99.9%
+2. Update `firebase.json` with your project details:
+   ```json
+   {
+     "projectId": "YOUR_PROJECT_ID",
+     "appId": "YOUR_APP_ID"
+   }
+   ```
 
-## 🤝 Contributing
+#### Step 3: Download Configuration Files
+1. **Android**: Download `google-services.json` from Firebase Console
+   - Place it in `android/app/google-services.json`
+   
+2. **iOS**: Download `GoogleService-Info.plist` from Firebase Console
+   - Place it in `ios/Runner/GoogleService-Info.plist`
+   
+3. **macOS**: Download `GoogleService-Info.plist` from Firebase Console
+   - Place it in `macos/Runner/GoogleService-Info.plist`
 
-We welcome contributions! Please read our [Contributing Guidelines](CONTRIBUTING.md) before submitting pull requests.
+#### Step 4: Configure Firestore Rules
+Update `firestore.rules` and `storage.rules` according to your security requirements.
+
+### 4. Run the Application
+
+```bash
+# For development
+flutter run
+
+# For specific platform
+flutter run -d chrome  # Web
+flutter run -d android # Android
+flutter run -d ios     # iOS
+```
+
+## 🔒 Security Notes
+
+### Files Excluded from Git
+The following sensitive files are automatically excluded via `.gitignore`:
+- `android/app/google-services.json` for Android
+- `ios/Runner/GoogleService-Info.plist` for iOS
+- `macos/Runner/GoogleService-Info.plist` for macOS
+- `.firebaserc` (Firebase project configuration)
+- `.env` files (environment variables)
+- API keys and certificates
+
+### Environment Variables
+For additional security, consider using environment variables for sensitive data:
+```bash
+# Create .env file (not tracked by git)
+FIREBASE_API_KEY=your_api_key
+FIREBASE_PROJECT_ID=your_project_id
+```
+
+## 📁 Project Structure
+
+```
+lib/
+├── models/          # Data models
+├── providers/       # State management
+├── screens/         # UI screens
+├── services/        # Business logic
+├── utils/           # Utilities
+└── widgets/         # Reusable widgets
+```
+
+## 🛠️ Development
+
+### Code Style
+This project follows Flutter's official style guide. Run:
+```bash
+flutter analyze
+dart format .
+```
+
+### Testing
+```bash
+flutter test
+```
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
+
 ## 📞 Support
 
-- **Email**: oae-support@iitd.ac.in
-- **Phone**: +91-11-2659-1234
-- **Office**: Room 123, Main Building, IIT Delhi
+For support and questions, please contact the development team or create an issue in the repository.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+**Note**: This is a public repository. Never commit sensitive information like API keys, passwords, or personal data. Always use environment variables or secure configuration files for sensitive data.

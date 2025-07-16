@@ -1,10 +1,10 @@
-# 🔥 Firebase Setup Status - iitd-oae-b9687
+# 🔥 Firebase Setup Status - YOUR_PROJECT_ID
 
 ## ✅ **COMPLETED:**
 
 ### **1. Firebase Project Setup**
-- ✅ Project ID: `iitd-oae-b9687`
-- ✅ Project Number: `736731624790`
+- ✅ Project ID: `YOUR_PROJECT_ID`
+- ✅ Project Number: `YOUR_PROJECT_NUMBER`
 - ✅ Firebase CLI initialized
 - ✅ Firestore database created in `asia-south1`
 
@@ -12,7 +12,7 @@
 - ✅ Security rules deployed
 - ✅ Database location: `asia-south1`
 - ✅ Rules file: `firestore.rules`
-- ✅ Indexes file: `firestore.indexes.json`
+- ✅ Indexes file: `firestore_indexes.json`
 
 ### **3. App Configuration**
 - ✅ Firebase dependencies added
@@ -23,7 +23,7 @@
 ## 🔧 **NEXT STEPS REQUIRED:**
 
 ### **Step 1: Get Firebase Web App Configuration**
-1. Go to [Firebase Console](https://console.firebase.google.com/project/iitd-oae-b9687)
+1. Go to [Firebase Console](https://console.firebase.google.com/project/YOUR_PROJECT_ID)
 2. Click ⚙️ (Project settings)
 3. Scroll to "Your apps" section
 4. Click "Add app" → "Web"
@@ -37,10 +37,10 @@ Replace placeholder values in `lib/firebase_options.dart`:
 static const FirebaseOptions web = FirebaseOptions(
   apiKey: 'YOUR_ACTUAL_API_KEY',           // ← Replace this
   appId: 'YOUR_ACTUAL_APP_ID',             // ← Replace this
-  messagingSenderId: '736731624790',       // ✅ Already correct
-  projectId: 'iitd-oae-b9687',             // ✅ Already correct
-  authDomain: 'iitd-oae-b9687.firebaseapp.com',  // ✅ Already correct
-  storageBucket: 'iitd-oae-b9687.appspot.com',   // ✅ Already correct
+  messagingSenderId: 'YOUR_SENDER_ID',     // ← Replace this
+  projectId: 'YOUR_PROJECT_ID',            // ← Replace this
+  authDomain: 'YOUR_PROJECT_ID.firebaseapp.com',  // ← Replace this
+  storageBucket: 'YOUR_PROJECT_ID.appspot.com',   // ← Replace this
 );
 ```
 
@@ -48,7 +48,7 @@ static const FirebaseOptions web = FirebaseOptions(
 1. In Firebase Console → Authentication
 2. Click "Get started"
 3. Enable "Email/Password" sign-in method
-4. Add admin user: `sudo.sde@gmail.com` / `admin123`
+4. Add admin user: `admin@example.com` / `admin123`
 
 ### **Step 4: Create Admin User in Firestore**
 1. Go to Firestore Database
@@ -80,12 +80,12 @@ This requires completing Steps 1-4 above.
 When you get your config from Firebase Console, it will look like:
 ```javascript
 const firebaseConfig = {
-  apiKey: "AIzaSyC...",
-  authDomain: "iitd-oae-b9687.firebaseapp.com",
-  projectId: "iitd-oae-b9687",
-  storageBucket: "iitd-oae-b9687.appspot.com",
-  messagingSenderId: "736731624790",
-  appId: "1:736731624790:web:..."
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT_ID.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
 };
 ```
 
@@ -103,7 +103,7 @@ flutter run -d chrome --target=lib/main_demo.dart
 ```
 
 **Demo Credentials:**
-- Admin: `sudo.sde@gmail.com` / `admin123`
+- Admin: `admin@demo.com` / `admin123`
 - Student: `student@demo.com` / `password123`
 - Driver: `driver@demo.com` / `password123`
 

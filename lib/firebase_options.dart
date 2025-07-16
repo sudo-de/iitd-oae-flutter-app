@@ -6,6 +6,12 @@ import 'package:flutter/foundation.dart'
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
+/// IMPORTANT: Replace these placeholder values with your actual Firebase configuration.
+/// You can get these values from your Firebase Console:
+/// 1. Go to Project Settings > General
+/// 2. Scroll down to "Your apps" section
+/// 3. Select your app and copy the configuration values
+///
 /// Example:
 /// ```dart
 /// import 'firebase_options.dart';
@@ -40,50 +46,50 @@ class DefaultFirebaseOptions {
     }
   }
 
+  // TODO: Replace with your actual Firebase configuration
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyC0Q0oEuM8AXQtUxrgsXET1kz22IbwXxy8',
-    appId: '1:736731624790:web:3fc00ef412addba682d2f7',
-    messagingSenderId: '736731624790',
-    projectId: 'iitd-oae-b9687',
-    authDomain: 'iitd-oae-b9687.firebaseapp.com',
-    storageBucket: 'iitd-oae-b9687.firebasestorage.app',
-    measurementId: 'G-2GQ8EDWD93',
+    apiKey: 'YOUR_WEB_API_KEY',
+    appId: 'YOUR_WEB_APP_ID',
+    messagingSenderId: 'YOUR_SENDER_ID',
+    projectId: 'YOUR_PROJECT_ID',
+    authDomain: 'YOUR_PROJECT_ID.firebaseapp.com',
+    storageBucket: 'YOUR_PROJECT_ID.firebasestorage.app',
+    measurementId: 'YOUR_MEASUREMENT_ID',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCYvyNn_7S_2Km_CkxTICrfMr8h-DvqSnM',
-    appId: '1:736731624790:android:b1dc207c39bf84f482d2f7',
-    messagingSenderId: '736731624790',
-    projectId: 'iitd-oae-b9687',
-    storageBucket: 'iitd-oae-b9687.firebasestorage.app',
+    apiKey: 'YOUR_ANDROID_API_KEY',
+    appId: 'YOUR_ANDROID_APP_ID',
+    messagingSenderId: 'YOUR_SENDER_ID',
+    projectId: 'YOUR_PROJECT_ID',
+    storageBucket: 'YOUR_PROJECT_ID.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyD5_hixiLOIxMnuCDnUjLrJvyvo4zrzG28',
-    appId: '1:736731624790:ios:fb9005a81b3fc57482d2f7',
-    messagingSenderId: '736731624790',
-    projectId: 'iitd-oae-b9687',
-    storageBucket: 'iitd-oae-b9687.firebasestorage.app',
+    apiKey: 'YOUR_IOS_API_KEY',
+    appId: 'YOUR_IOS_APP_ID',
+    messagingSenderId: 'YOUR_SENDER_ID',
+    projectId: 'YOUR_PROJECT_ID',
+    storageBucket: 'YOUR_PROJECT_ID.firebasestorage.app',
     iosBundleId: 'com.iitd.oae',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyD5_hixiLOIxMnuCDnUjLrJvyvo4zrzG28',
-    appId: '1:736731624790:ios:b5c0ab98d5d07bd482d2f7',
-    messagingSenderId: '736731624790',
-    projectId: 'iitd-oae-b9687',
-    storageBucket: 'iitd-oae-b9687.firebasestorage.app',
+    apiKey: 'YOUR_MACOS_API_KEY',
+    appId: 'YOUR_MACOS_APP_ID',
+    messagingSenderId: 'YOUR_SENDER_ID',
+    projectId: 'YOUR_PROJECT_ID',
+    storageBucket: 'YOUR_PROJECT_ID.firebasestorage.app',
     iosBundleId: 'com.example.flutterApp',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyC0Q0oEuM8AXQtUxrgsXET1kz22IbwXxy8',
-    appId: '1:736731624790:web:5b79b49f4becc92282d2f7',
-    messagingSenderId: '736731624790',
-    projectId: 'iitd-oae-b9687',
-    authDomain: 'iitd-oae-b9687.firebaseapp.com',
-    storageBucket: 'iitd-oae-b9687.firebasestorage.app',
-    measurementId: 'G-QW09HTEYYT',
+    apiKey: 'YOUR_WINDOWS_API_KEY',
+    appId: 'YOUR_WINDOWS_APP_ID',
+    messagingSenderId: 'YOUR_SENDER_ID',
+    projectId: 'YOUR_PROJECT_ID',
+    authDomain: 'YOUR_PROJECT_ID.firebaseapp.com',
+    storageBucket: 'YOUR_PROJECT_ID.firebasestorage.app',
+    measurementId: 'YOUR_MEASUREMENT_ID',
   );
-
 }
