@@ -49,3 +49,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Screenshots and demo images (allow these)
+!assets/images/*_screen.png
+!assets/images/*_demo.png
+!assets/images/*_preview.png
+!assets/images/*_walkthrough.png
