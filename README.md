@@ -9,11 +9,19 @@ A comprehensive Flutter application for the Office of Accessible Education (OAE)
 - **Admin Panel**: User management, complaint handling, analytics
 - **Real-time Notifications**: Push notifications for ride updates
 - **Firebase Integration**: Authentication, Firestore database, Cloud Storage
-- **Cross-platform**: Android, iOS, Web, macOS, Windows
+- **Cross-platform**: Android, iOS
 
 ## 📱 Screenshots
 
 Check out the `screenshots/` directory for app previews.
+| Login Screen | Admin Panel | Student Dashboard | Student ID Profile | Book Ride | Class Schedule | Driver Dashboard |
+|--------------|-------------|-------------------|--------------------|-----------|----------------|------------------|
+| ![Login Screen](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.55.58.png) | ![Admin Panel](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.55.30.png) | ![Student Dashboard](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.52.07.png) | ![Student ID Profile](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.53.02.png) | ![Book Ride](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.53.10.png) | ![Class Schedule](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.53.56.png) | ![Driver Dashboard](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.54.34.png) |
+
+| My complaint | Complaints | User Management | Ride History | Earnings | Menu list | Analytics |  
+|--------------|------------|-----------------|--------------|----------|-----------|-----------|
+| ![My complaint](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.54.11.png) | ![Complaints](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.54.06.png) | ![User Management](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.55.37.png) | ![Ride History](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.54.48.png) | ![Earnings](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.54.55.png) | ![Notifications](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.52.54.png) | ![Analytics](screenshots/Simulator%20Screenshot%20-%20iPhone%2016%20Plus%20-%202025-07-17%20at%2003.55.43.png) |
+
 
 ## 🔧 Setup Instructions
 
