@@ -5,15 +5,27 @@ A comprehensive Flutter application for the Office of Accessible Education (OAE)
 ## 📱 App Preview
 
 ### Screenshots
-![Login Screen](assets/images/login_screen.png)
-![Student Dashboard](assets/images/student_dashboard.png)
-![Book Ride](assets/images/book_ride.png)
-![Class Schedule](assets/images/class_schedule.png)
-![Driver Dashboard](assets/images/driver_dashboard.png)
-![Admin Panel](assets/images/admin_panel.png)
+
+<div align="center">
+  <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.55.58.png" width="200" alt="Login Screen">
+  <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.55.43.png" width="200" alt="Student Dashboard">
+  <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.55.37.png" width="200" alt="Book Ride">
+  <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.55.30.png" width="200" alt="Class Schedule">
+  <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.54.55.png" width="200" alt="Driver Dashboard">
+  <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.54.48.png" width="200" alt="Admin Panel">
+  <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.54.34.png" width="200" alt="Complaints">
+  <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.54.11.png" width="200" alt="User Management">
+  <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.54.06.png" width="200" alt="Ride History">
+  <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.53.56.png" width="200" alt="Earnings">
+  <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.53.10.png" width="200" alt="Profile">
+  <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.53.02.png" width="200" alt="Settings">
+  <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.52.54.png" width="200" alt="Notifications">
+  <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-17 at 03.52.07.png" width="200" alt="Analytics">
+  <img src="screenshots/Simulator Screenshot - iPhone 16 Plus - 2025-07-16 at 22.19.31.png" width="200" alt="Welcome Screen">
+</div>
 
 ### Live Demo
-- **Web Demo**: [Try the app online](https://your-app-url.web.app)
+- **Web Demo**: [Try the app online](https://iitd-oae-b9687.web.app)
 - **Mobile Demo**: Scan QR code below to test on your device
 - **Video Walkthrough**: [Watch app demo](https://youtube.com/watch?v=your-video-id)
 

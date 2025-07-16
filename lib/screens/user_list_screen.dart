@@ -1,15 +1,261 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/provider.dart';
 import 'dart:io';
-import 'dart:convert';
+
 import '../models/user_model.dart';
 import '../services/auth_service.dart';
-
 import '../providers/auth_provider.dart';
+import '../utils/color_utils.dart';
+
+// Shimmer loading widget for better UX
+class _ShimmerLoading extends StatefulWidget {
+  final Widget child;
+  final bool isLoading;
+
+  const _ShimmerLoading({required this.child, required this.isLoading});
+
+  @override
+  State<_ShimmerLoading> createState() => _ShimmerLoadingState();
+}
+
+class _ShimmerLoadingState extends State<_ShimmerLoading>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    );
+    _animation = Tween<double>(
+      begin: -1.0,
+      end: 2.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+    if (widget.isLoading) {
+      _controller.repeat();
+    }
+  }
+
+  @override
+  void didUpdateWidget(_ShimmerLoading oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isLoading && !oldWidget.isLoading) {
+      _controller.repeat();
+    } else if (!widget.isLoading && oldWidget.isLoading) {
+      _controller.stop();
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.isLoading) {
+      return widget.child;
+    }
+
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return ShaderMask(
+          shaderCallback: (bounds) {
+            return LinearGradient(
+              begin: Alignment(_animation.value - 1, 0),
+              end: Alignment(_animation.value, 0),
+              colors: const [
+                Colors.transparent,
+                Colors.white,
+                Colors.transparent,
+              ],
+              stops: const [0.0, 0.5, 1.0],
+            ).createShader(bounds);
+          },
+          child: widget.child,
+        );
+      },
+    );
+  }
+}
+
+// Optimized user card widget
+class _UserCard extends StatelessWidget {
+  final UserModel user;
+  final VoidCallback onTap;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
+
+  const _UserCard({
+    required this.user,
+    required this.onTap,
+    required this.onEdit,
+    required this.onDelete,
+  });
+
+  Color _getRoleColor(UserRole role) {
+    switch (role) {
+      case UserRole.student:
+        return const Color(0xFF4299e1);
+      case UserRole.driver:
+        return const Color(0xFF48bb78);
+      case UserRole.admin:
+        return const Color(0xFFf56565);
+    }
+  }
+
+  IconData _getRoleIcon(UserRole role) {
+    switch (role) {
+      case UserRole.student:
+        return Icons.school;
+      case UserRole.driver:
+        return Icons.drive_eta;
+      case UserRole.admin:
+        return Icons.admin_panel_settings;
+    }
+  }
+
+  String _getRoleTitle(UserRole role) {
+    switch (role) {
+      case UserRole.student:
+        return 'Student';
+      case UserRole.driver:
+        return 'Driver';
+      case UserRole.admin:
+        return 'Admin';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: InkWell(
+        onTap: () {
+          HapticFeedback.lightImpact();
+          onTap();
+        },
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              // User Avatar
+              Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  color: ColorUtils.withOpacity(_getRoleColor(user.role), 0.1),
+                  borderRadius: BorderRadius.circular(30),
+                  border: Border.all(
+                    color: ColorUtils.withOpacity(
+                      _getRoleColor(user.role),
+                      0.3,
+                    ),
+                    width: 2,
+                  ),
+                ),
+                child: Icon(
+                  _getRoleIcon(user.role),
+                  color: _getRoleColor(user.role),
+                  size: 28,
+                ),
+              ),
+              const SizedBox(width: 16),
+
+              // User Info
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      user.name,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF2A2075),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      user.email,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Color(0xFF666666),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: ColorUtils.withOpacity(
+                          _getRoleColor(user.role),
+                          0.1,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: ColorUtils.withOpacity(
+                            _getRoleColor(user.role),
+                            0.3,
+                          ),
+                        ),
+                      ),
+                      child: Text(
+                        _getRoleTitle(user.role),
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: _getRoleColor(user.role),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // Action Buttons
+              Column(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      HapticFeedback.lightImpact();
+                      onEdit();
+                    },
+                    icon: const Icon(Icons.edit, color: Color(0xFF2A2075)),
+                    tooltip: 'Edit User',
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      HapticFeedback.heavyImpact();
+                      onDelete();
+                    },
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                    tooltip: 'Delete User',
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class UserListScreen extends StatefulWidget {
   const UserListScreen({super.key});
@@ -18,7 +264,8 @@ class UserListScreen extends StatefulWidget {
   State<UserListScreen> createState() => _UserListScreenState();
 }
 
-class _UserListScreenState extends State<UserListScreen> {
+class _UserListScreenState extends State<UserListScreen>
+    with TickerProviderStateMixin {
   List<UserModel> _users = [];
   List<UserModel> _filteredUsers = [];
   bool _isLoading = true;
@@ -27,10 +274,26 @@ class _UserListScreenState extends State<UserListScreen> {
   final AuthService _authService = AuthService();
   final ImagePicker _picker = ImagePicker();
 
+  late AnimationController _fadeController;
+  late Animation<double> _fadeAnimation;
+
   @override
   void initState() {
     super.initState();
+    _fadeController = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _fadeController, curve: Curves.easeOutCubic),
+    );
     _loadUsers();
+  }
+
+  @override
+  void dispose() {
+    _fadeController.dispose();
+    super.dispose();
   }
 
   Future<void> _loadUsers() async {
@@ -47,6 +310,7 @@ class _UserListScreenState extends State<UserListScreen> {
             _filterUsers();
             _isLoading = false;
           });
+          _fadeController.forward();
         }
       }
     } catch (e) {
@@ -58,6 +322,10 @@ class _UserListScreenState extends State<UserListScreen> {
           SnackBar(
             content: Text('Failed to load users: ${e.toString()}'),
             backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
           ),
         );
       }
@@ -96,39 +364,6 @@ class _UserListScreenState extends State<UserListScreen> {
       _searchQuery = query;
       _filterUsers();
     });
-  }
-
-  Color _getRoleColor(UserRole role) {
-    switch (role) {
-      case UserRole.student:
-        return const Color(0xFF4299e1);
-      case UserRole.driver:
-        return const Color(0xFF48bb78);
-      case UserRole.admin:
-        return const Color(0xFFf56565);
-    }
-  }
-
-  IconData _getRoleIcon(UserRole role) {
-    switch (role) {
-      case UserRole.student:
-        return Icons.school;
-      case UserRole.driver:
-        return Icons.drive_eta;
-      case UserRole.admin:
-        return Icons.admin_panel_settings;
-    }
-  }
-
-  String _getRoleTitle(UserRole role) {
-    switch (role) {
-      case UserRole.student:
-        return 'Student';
-      case UserRole.driver:
-        return 'Driver';
-      case UserRole.admin:
-        return 'Admin';
-    }
   }
 
   void _showUserDetails(UserModel user) {
@@ -1548,362 +1783,254 @@ class _UserListScreenState extends State<UserListScreen> {
     );
   }
 
+  void _showAddUserDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Add New User',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF2A2075),
+            ),
+          ),
+          content: const Text('Select the type of user you want to add:'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _showAddStudentDialog(context);
+              },
+              child: const Text('Student'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _showAddDriverDialog(context);
+              },
+              child: const Text('Driver'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _showAddAdminDialog(context);
+              },
+              child: const Text('Admin'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Users Manager'),
-        backgroundColor: const Color(0xFF667eea),
+        title: const Text(
+          'User Manager',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 20,
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: const Color(0xFF2A2075),
         foregroundColor: Colors.white,
         elevation: 0,
-      ),
-      body: Column(
-        children: [
-          // Search and Filter Bar
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withValues(alpha: 0.1),
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                // Search Bar
-                TextField(
-                  onChanged: _onSearchChanged,
-                  decoration: InputDecoration(
-                    hintText: 'Search users...',
-                    prefixIcon: const Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    filled: true,
-                    fillColor: const Color(0xFFf7fafc),
-                  ),
-                ),
-                const SizedBox(height: 12),
-
-                // User Type Buttons
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        onPressed: () => _showAddStudentDialog(context),
-                        icon: const Icon(Icons.person_add),
-                        label: const Text('Add Student'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF4299e1),
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        onPressed: () => _showAddDriverDialog(context),
-                        icon: const Icon(Icons.drive_eta),
-                        label: const Text('Add Driver'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF48bb78),
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        onPressed: () => _showAddAdminDialog(context),
-                        icon: const Icon(Icons.admin_panel_settings),
-                        label: const Text('Add Admin'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFf56565),
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-
-                // Category Filter Chips
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      FilterChip(
-                        label: const Text('All'),
-                        selected: _selectedRole == null,
-                        onSelected: (selected) {
-                          if (selected) _onRoleFilterChanged(null);
-                        },
-                        selectedColor: const Color(
-                          0xFF667eea,
-                        ).withValues(alpha: 0.2),
-                        checkmarkColor: const Color(0xFF667eea),
-                      ),
-                      const SizedBox(width: 8),
-                      FilterChip(
-                        label: const Text('Students'),
-                        selected: _selectedRole == UserRole.student,
-                        onSelected: (selected) {
-                          if (selected) {
-                            _onRoleFilterChanged(UserRole.student);
-                          }
-                        },
-                        selectedColor: const Color(
-                          0xFF667eea,
-                        ).withValues(alpha: 0.2),
-                        checkmarkColor: const Color(0xFF667eea),
-                      ),
-                      const SizedBox(width: 8),
-                      FilterChip(
-                        label: const Text('Drivers'),
-                        selected: _selectedRole == UserRole.driver,
-                        onSelected: (selected) {
-                          if (selected) {
-                            _onRoleFilterChanged(UserRole.driver);
-                          }
-                        },
-                        selectedColor: const Color(
-                          0xFF667eea,
-                        ).withValues(alpha: 0.2),
-                        checkmarkColor: const Color(0xFF667eea),
-                      ),
-                      const SizedBox(width: 8),
-                      FilterChip(
-                        label: const Text('Admins'),
-                        selected: _selectedRole == UserRole.admin,
-                        onSelected: (selected) {
-                          if (selected) {
-                            _onRoleFilterChanged(UserRole.admin);
-                          }
-                        },
-                        selectedColor: const Color(
-                          0xFF667eea,
-                        ).withValues(alpha: 0.2),
-                        checkmarkColor: const Color(0xFF667eea),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // User Count
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              children: [
-                Text(
-                  'Total Users: ${_filteredUsers.length}',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF2d3748),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Users List
-          Expanded(
-            child: _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : _filteredUsers.isEmpty
-                ? const Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.people_outline,
-                          size: 64,
-                          color: Colors.grey,
-                        ),
-                        SizedBox(height: 16),
-                        Text(
-                          'No users found',
-                          style: TextStyle(fontSize: 18, color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                  )
-                : RefreshIndicator(
-                    onRefresh: _loadUsers,
-                    child: ListView.builder(
-                      padding: const EdgeInsets.all(16),
-                      itemCount: _filteredUsers.length,
-                      itemBuilder: (context, index) {
-                        final user = _filteredUsers[index];
-                        if (kDebugMode) {
-                          debugPrint(
-                            'Building user list item for: ${user.name}',
-                          );
-                          debugPrint('Profile photo: ${user.profilePhoto}');
-                        }
-                        return Card(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          elevation: 2,
-                          child: ListTile(
-                            leading: CircleAvatar(
-                              radius: 25,
-                              backgroundColor: _getRoleColor(user.role),
-                              child:
-                                  user.profilePhoto != null &&
-                                      user.profilePhoto!.isNotEmpty
-                                  ? ClipOval(
-                                      child: _buildUserProfileImage(
-                                        user.profilePhoto!,
-                                        user.role,
-                                      ),
-                                    )
-                                  : Icon(
-                                      _getRoleIcon(user.role),
-                                      color: Colors.white,
-                                    ),
-                            ),
-                            title: Text(
-                              user.name,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(user.email),
-                                Row(
-                                  children: [
-                                    Text(
-                                      'Role: ${_getRoleTitle(user.role)}',
-                                      style: TextStyle(
-                                        color: _getRoleColor(user.role),
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    SizedBox(width: 8),
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 6,
-                                        vertical: 2,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: Colors.green,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Text(
-                                        'Active',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                if (user.phoneNumber != null)
-                                  Text('Phone: ${user.phoneNumber}'),
-                              ],
-                            ),
-                            trailing: PopupMenuButton<String>(
-                              onSelected: (value) {
-                                switch (value) {
-                                  case 'view':
-                                    _showUserDetails(user);
-                                    break;
-                                  case 'edit':
-                                    _showEditUserDialog(user);
-                                    break;
-                                  case 'delete':
-                                    _showDeleteConfirmation(user);
-                                    break;
-                                }
-                              },
-                              itemBuilder: (context) => [
-                                const PopupMenuItem(
-                                  value: 'view',
-                                  child: Text('View Details'),
-                                ),
-                                const PopupMenuItem(
-                                  value: 'edit',
-                                  child: Text('Edit'),
-                                ),
-                                if (user.role != UserRole.admin ||
-                                    _canDeleteAdmin(user))
-                                  const PopupMenuItem(
-                                    value: 'delete',
-                                    child: Text('Delete'),
-                                  ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh, size: 24),
+            onPressed: () {
+              HapticFeedback.lightImpact();
+              _loadUsers();
+            },
+            tooltip: 'Refresh',
           ),
         ],
+      ),
+      body: FadeTransition(
+        opacity: _fadeAnimation,
+        child: Column(
+          children: [
+            // Search and Filter Section
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: ColorUtils.withOpacity(Colors.black, 0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  // Search Bar
+                  TextField(
+                    onChanged: _onSearchChanged,
+                    decoration: InputDecoration(
+                      hintText: 'Search users...',
+                      prefixIcon: const Icon(
+                        Icons.search,
+                        color: Color(0xFF2A2075),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: ColorUtils.withOpacity(
+                        const Color(0xFF2A2075),
+                        0.05,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Role Filter Chips
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        _buildFilterChip(null, 'All'),
+                        const SizedBox(width: 8),
+                        _buildFilterChip(UserRole.student, 'Students'),
+                        const SizedBox(width: 8),
+                        _buildFilterChip(UserRole.driver, 'Drivers'),
+                        const SizedBox(width: 8),
+                        _buildFilterChip(UserRole.admin, 'Admins'),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // User Count
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.people,
+                    color: ColorUtils.withOpacity(const Color(0xFF2A2075), 0.7),
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    '${_filteredUsers.length} users found',
+                    style: TextStyle(
+                      color: ColorUtils.withOpacity(
+                        const Color(0xFF2A2075),
+                        0.7,
+                      ),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Users List
+            Expanded(
+              child: _ShimmerLoading(
+                isLoading: _isLoading,
+                child: _filteredUsers.isEmpty && !_isLoading
+                    ? _buildEmptyState()
+                    : ListView.builder(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        itemCount: _filteredUsers.length,
+                        itemBuilder: (context, index) {
+                          final user = _filteredUsers[index];
+                          return _UserCard(
+                            user: user,
+                            onTap: () => _showUserDetails(user),
+                            onEdit: () => _showEditUserDialog(user),
+                            onDelete: () => _showDeleteConfirmation(user),
+                          );
+                        },
+                      ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          HapticFeedback.lightImpact();
+          _showAddUserDialog(context);
+        },
+        backgroundColor: const Color(0xFF2A2075),
+        foregroundColor: Colors.white,
+        icon: const Icon(Icons.add),
+        label: const Text('Add User'),
+        elevation: 4,
       ),
     );
   }
 
-  Widget _buildUserProfileImage(String imageData, UserRole role) {
-    try {
-      // Check if it's a base64 string (starts with data:image or is a long base64 string)
-      if (imageData.startsWith('data:image') || imageData.length > 100) {
-        // Handle base64 image
-        final bytes = base64Decode(
-          imageData.replaceFirst(RegExp(r'data:image/[^;]+;base64,'), ''),
-        );
-        return Image.memory(
-          bytes,
-          fit: BoxFit.cover,
-          width: 50,
-          height: 50,
-          errorBuilder: (context, error, stackTrace) {
-            if (kDebugMode) {
-              debugPrint('Error loading base64 image in user list: $error');
-            }
-            return Icon(_getRoleIcon(role), color: Colors.white);
-          },
-        );
-      } else {
-        // Handle URL image
-        return CachedNetworkImage(
-          imageUrl: imageData,
-          fit: BoxFit.cover,
-          width: 50,
-          height: 50,
-          placeholder: (context, url) {
-            if (kDebugMode) {
-              debugPrint('User list loading placeholder for: $url');
-            }
-            return Icon(_getRoleIcon(role), color: Colors.white);
-          },
-          errorWidget: (context, url, error) {
-            if (kDebugMode) {
-              debugPrint('User list error loading image: $url, error: $error');
-            }
-            return Icon(_getRoleIcon(role), color: Colors.white);
-          },
-        );
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        debugPrint('Error building user profile image: $e');
-      }
-      return Icon(_getRoleIcon(role), color: Colors.white);
-    }
+  Widget _buildFilterChip(UserRole? role, String label) {
+    final isSelected = _selectedRole == role;
+    return FilterChip(
+      label: Text(
+        label,
+        style: TextStyle(
+          color: isSelected ? Colors.white : const Color(0xFF2A2075),
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      selected: isSelected,
+      onSelected: (selected) {
+        HapticFeedback.lightImpact();
+        _onRoleFilterChanged(selected ? role : null);
+      },
+      backgroundColor: Colors.transparent,
+      selectedColor: const Color(0xFF2A2075),
+      checkmarkColor: Colors.white,
+      side: BorderSide(
+        color: isSelected
+            ? const Color(0xFF2A2075)
+            : ColorUtils.withOpacity(const Color(0xFF2A2075), 0.3),
+      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.people_outline,
+            size: 80,
+            color: ColorUtils.withOpacity(const Color(0xFF2A2075), 0.3),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'No users found',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: ColorUtils.withOpacity(const Color(0xFF2A2075), 0.7),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Try adjusting your search or filters',
+            style: TextStyle(fontSize: 14, color: const Color(0xFF666666)),
+          ),
+        ],
+      ),
+    );
   }
 }

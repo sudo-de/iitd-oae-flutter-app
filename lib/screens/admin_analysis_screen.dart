@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../models/ride.dart';
 import '../models/user_model.dart';
+import '../utils/logger.dart';
 import '../services/ride_service.dart';
 
 class AdminAnalysisScreen extends StatefulWidget {
@@ -61,7 +62,7 @@ class _AdminAnalysisScreenState extends State<AdminAnalysisScreen> {
         setState(() {
           _rides = rides;
         });
-        print('Loaded ${rides.length} rides');
+        Logger.info('Loaded ${rides.length} rides');
       }
 
       // Load all users
@@ -78,10 +79,10 @@ class _AdminAnalysisScreenState extends State<AdminAnalysisScreen> {
           _users = users;
           _isLoading = false;
         });
-        print('Loaded ${users.length} users');
+        Logger.info('Loaded ${users.length} users');
       }
     } catch (e) {
-      print('Error in _loadData: $e');
+      Logger.error('Error in _loadData: $e');
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -287,13 +288,10 @@ class _AdminAnalysisScreenState extends State<AdminAnalysisScreen> {
       try {
         directory = await getExternalStorageDirectory();
       } catch (e) {
-        print('Error getting external storage: $e');
+        Logger.error('Error getting external storage: $e');
       }
 
-      if (directory == null) {
-        // Fallback to app documents directory
-        directory = await getApplicationDocumentsDirectory();
-      }
+      directory ??= await getApplicationDocumentsDirectory();
 
       // Create CSV content
       final csvContent = _generateCSVContent();
@@ -311,7 +309,7 @@ class _AdminAnalysisScreenState extends State<AdminAnalysisScreen> {
         Colors.green,
       );
     } catch (e) {
-      print('Error downloading CSV: $e');
+      Logger.error('Error downloading CSV: $e');
       _showSnackBar('Error downloading CSV: $e', Colors.red);
     }
   }

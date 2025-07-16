@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -17,6 +18,237 @@ import 'student_complaints_screen.dart';
 import 'new_complaint_screen.dart';
 import 'class_schedule_screen.dart';
 import 'login_screen.dart';
+import '../utils/color_utils.dart';
+
+// Shimmer loading effect for better UX
+class _ShimmerLoading extends StatefulWidget {
+  final Widget child;
+  final bool isLoading;
+
+  const _ShimmerLoading({required this.child, required this.isLoading});
+
+  @override
+  State<_ShimmerLoading> createState() => _ShimmerLoadingState();
+}
+
+class _ShimmerLoadingState extends State<_ShimmerLoading>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    );
+    _animation = Tween<double>(
+      begin: -1.0,
+      end: 2.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+    if (widget.isLoading) {
+      _controller.repeat();
+    }
+  }
+
+  @override
+  void didUpdateWidget(_ShimmerLoading oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isLoading && !oldWidget.isLoading) {
+      _controller.repeat();
+    } else if (!widget.isLoading && oldWidget.isLoading) {
+      _controller.stop();
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.isLoading) {
+      return widget.child;
+    }
+
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return ShaderMask(
+          shaderCallback: (bounds) {
+            return LinearGradient(
+              begin: Alignment(_animation.value - 1, 0),
+              end: Alignment(_animation.value, 0),
+              colors: const [
+                Colors.transparent,
+                Colors.white,
+                Colors.transparent,
+              ],
+              stops: const [0.0, 0.5, 1.0],
+            ).createShader(bounds);
+          },
+          child: widget.child,
+        );
+      },
+    );
+  }
+}
+
+// Optimized animated card with better performance
+class _AnimatedCard extends StatefulWidget {
+  final Widget child;
+  final VoidCallback onTap;
+  final String semanticsLabel;
+
+  const _AnimatedCard({
+    required this.child,
+    required this.onTap,
+    required this.semanticsLabel,
+  });
+
+  @override
+  State<_AnimatedCard> createState() => _AnimatedCardState();
+}
+
+class _AnimatedCardState extends State<_AnimatedCard>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnim;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 120),
+    );
+    _scaleAnim = Tween<double>(
+      begin: 1.0,
+      end: 0.95,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onTapDown(TapDownDetails d) {
+    HapticFeedback.lightImpact();
+    _controller.forward();
+  }
+
+  void _onTapUp(TapUpDetails d) => _controller.reverse();
+  void _onTapCancel() => _controller.reverse();
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: widget.semanticsLabel,
+      button: true,
+      child: GestureDetector(
+        onTap: widget.onTap,
+        onTapDown: _onTapDown,
+        onTapUp: _onTapUp,
+        onTapCancel: _onTapCancel,
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (context, child) =>
+              Transform.scale(scale: _scaleAnim.value, child: child),
+          child: RepaintBoundary(child: widget.child),
+        ),
+      ),
+    );
+  }
+}
+
+// Staggered animation for cards
+class _StaggeredAnimatedCard extends StatefulWidget {
+  final Widget child;
+  final int index;
+
+  const _StaggeredAnimatedCard({required this.child, required this.index});
+
+  @override
+  State<_StaggeredAnimatedCard> createState() => _StaggeredAnimatedCardState();
+}
+
+class _StaggeredAnimatedCardState extends State<_StaggeredAnimatedCard>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _fadeAnim;
+  late Animation<Offset> _slideAnim;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+    _fadeAnim = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+    _slideAnim = Tween<Offset>(
+      begin: const Offset(0, 0.3),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+
+    // Stagger the animation
+    Future.delayed(Duration(milliseconds: widget.index * 100), () {
+      if (mounted) {
+        _controller.forward();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _fadeAnim,
+      child: SlideTransition(
+        position: _slideAnim,
+        child: RepaintBoundary(child: widget.child),
+      ),
+    );
+  }
+}
+
+// Skeleton loading widget
+class _SkeletonLoading extends StatelessWidget {
+  final double height;
+  final double width;
+  final double borderRadius;
+
+  const _SkeletonLoading({
+    this.height = 20,
+    this.width = double.infinity,
+    this.borderRadius = 4,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      width: width,
+      decoration: BoxDecoration(
+        color: Colors.grey.shade300,
+        borderRadius: BorderRadius.circular(borderRadius),
+      ),
+    );
+  }
+}
 
 class StudentDashboard extends StatefulWidget {
   const StudentDashboard({super.key});
@@ -25,18 +257,64 @@ class StudentDashboard extends StatefulWidget {
   State<StudentDashboard> createState() => _StudentDashboardState();
 }
 
-class _StudentDashboardState extends State<StudentDashboard> {
+class _StudentDashboardState extends State<StudentDashboard>
+    with TickerProviderStateMixin {
   List<ClassSchedule> _todayClasses = [];
   List<Ride> _recentRides = [];
   bool _isLoadingClasses = true;
   bool _isLoadingRides = true;
+  bool _isRefreshing = false;
+
+  // Animation controllers for smooth transitions
+  AnimationController? _fadeController;
+  AnimationController? _slideController;
+  Animation<double>? _fadeAnimation;
+  Animation<Offset>? _slideAnimation;
 
   @override
   void initState() {
     super.initState();
+
+    // Initialize animations
+    _fadeController = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+    _slideController = AnimationController(
+      duration: const Duration(milliseconds: 600),
+      vsync: this,
+    );
+
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _fadeController!, curve: Curves.easeOutCubic),
+    );
+
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0, 0.2), end: Offset.zero).animate(
+          CurvedAnimation(
+            parent: _slideController!,
+            curve: Curves.easeOutCubic,
+          ),
+        );
+
     _loadTodayClasses();
     _loadRecentRides();
     _refreshUserData();
+
+    // Start animations after a short delay to ensure proper initialization
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _fadeController?.forward();
+        _slideController?.forward();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _fadeController?.dispose();
+    _slideController?.dispose();
+    super.dispose();
   }
 
   Future<void> _refreshUserData() async {
@@ -80,12 +358,14 @@ class _StudentDashboardState extends State<StudentDashboard> {
           },
         );
       } else {
-        // Handle URL image
+        // Handle URL image with optimized caching
         return CachedNetworkImage(
           imageUrl: imageData,
           fit: BoxFit.cover,
           width: 100,
           height: 100,
+          memCacheWidth: 200, // Optimize memory usage
+          memCacheHeight: 200,
           placeholder: (context, url) {
             if (kDebugMode) {
               debugPrint('Loading placeholder for: $url');
@@ -159,12 +439,14 @@ class _StudentDashboardState extends State<StudentDashboard> {
           },
         );
       } else {
-        // Handle URL image
+        // Handle URL image with optimized caching
         return CachedNetworkImage(
           imageUrl: imageData,
           fit: BoxFit.cover,
           width: 80,
           height: 80,
+          memCacheWidth: 160, // Optimize memory usage
+          memCacheHeight: 160,
           placeholder: (context, url) {
             if (kDebugMode) {
               debugPrint('Profile dialog loading placeholder for: $url');
@@ -226,17 +508,21 @@ class _StudentDashboardState extends State<StudentDashboard> {
       // Sort by time
       todayClasses.sort((a, b) => a.time.compareTo(b.time));
 
-      setState(() {
-        _todayClasses = todayClasses;
-        _isLoadingClasses = false;
-      });
+      if (mounted) {
+        setState(() {
+          _todayClasses = todayClasses;
+          _isLoadingClasses = false;
+        });
+      }
     } catch (e) {
       if (kDebugMode) {
         debugPrint('Error loading today\'s classes: $e');
       }
-      setState(() {
-        _isLoadingClasses = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoadingClasses = false;
+        });
+      }
     }
   }
 
@@ -257,22 +543,40 @@ class _StudentDashboardState extends State<StudentDashboard> {
 
       final rides = await RideService.getRidesByUserId(user.id);
 
-      setState(() {
-        _recentRides = rides;
-        _isLoadingRides = false;
-      });
+      if (mounted) {
+        setState(() {
+          _recentRides = rides;
+          _isLoadingRides = false;
+        });
+      }
     } catch (e) {
       if (kDebugMode) {
         debugPrint('Error loading recent rides: $e');
       }
-      setState(() {
-        _isLoadingRides = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoadingRides = false;
+        });
+      }
     }
   }
 
   Future<void> _refreshDashboard() async {
-    await Future.wait([_loadTodayClasses(), _loadRecentRides()]);
+    if (_isRefreshing) return;
+
+    setState(() {
+      _isRefreshing = true;
+    });
+
+    try {
+      await Future.wait([_loadTodayClasses(), _loadRecentRides()]);
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isRefreshing = false;
+        });
+      }
+    }
   }
 
   String _getDayName(int weekday) {
@@ -320,14 +624,24 @@ class _StudentDashboardState extends State<StudentDashboard> {
               builder: (context) => IconButton(
                 icon: const Icon(Icons.menu, size: 24),
                 onPressed: () {
+                  HapticFeedback.lightImpact();
                   Scaffold.of(context).openDrawer();
                 },
               ),
             ),
             actions: [
               IconButton(
-                icon: const Icon(Icons.refresh, size: 24),
-                onPressed: _refreshDashboard,
+                icon: AnimatedRotation(
+                  turns: _isRefreshing ? 1 : 0,
+                  duration: const Duration(seconds: 1),
+                  child: const Icon(Icons.refresh, size: 24),
+                ),
+                onPressed: _isRefreshing
+                    ? null
+                    : () {
+                        HapticFeedback.lightImpact();
+                        _refreshDashboard();
+                      },
                 tooltip: 'Refresh Dashboard',
               ),
             ],
@@ -350,138 +664,15 @@ class _StudentDashboardState extends State<StudentDashboard> {
               child: RefreshIndicator(
                 onRefresh: _refreshDashboard,
                 color: const Color(0xFF667eea),
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    children: [
-                      // Welcome Card
-                      _buildWelcomeCard(context, user),
-                      const SizedBox(height: 24),
-
-                      // Today's Classes Card
-                      if (_todayClasses.isNotEmpty || _isLoadingClasses) ...[
-                        _buildTodayClassesCard(context),
-                        const SizedBox(height: 24),
-                      ],
-
-                      // Recent Rides Card
-                      if (_recentRides.isNotEmpty || _isLoadingRides) ...[
-                        _buildRecentRidesCard(context),
-                        const SizedBox(height: 24),
-                      ],
-
-                      // Quick Actions Area
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.1),
-                              blurRadius: 12,
-                              offset: const Offset(0, 6),
-                            ),
-                          ],
+                child: (_fadeAnimation != null && _slideAnimation != null)
+                    ? FadeTransition(
+                        opacity: _fadeAnimation!,
+                        child: SlideTransition(
+                          position: _slideAnimation!,
+                          child: _buildDashboardContent(context, user),
                         ),
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    color: const Color(
-                                      0xFF667eea,
-                                    ).withValues(alpha: 0.1),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: const Icon(
-                                    Icons.flash_on,
-                                    color: Color(0xFF667eea),
-                                    size: 20,
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                const Text(
-                                  'Quick Actions',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF2d3748),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 20),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: _buildQuickActionCard(
-                                    icon: Icons.directions_car,
-                                    title: 'Book Ride',
-                                    subtitle: 'Request a ride',
-                                    color: const Color(0xFF10B981),
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const BookRideScreen(),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: _buildQuickActionCard(
-                                    icon: Icons.history,
-                                    title: 'My Rides',
-                                    subtitle: 'View history',
-                                    color: const Color(0xFF3B82F6),
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const MyRidesScreen(),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 12),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: _buildQuickActionCard(
-                                    icon: Icons.schedule,
-                                    title: 'Class Schedule',
-                                    subtitle: 'Manage classes',
-                                    color: const Color(0xFF8B5CF6),
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const ClassScheduleScreen(),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 20), // Bottom padding for scroll
-                    ],
-                  ),
-                ),
+                      )
+                    : const Center(child: CircularProgressIndicator()),
               ),
             ),
           ),
@@ -661,12 +852,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
           ),
           const SizedBox(height: 12),
           if (_isLoadingClasses)
-            const Center(
-              child: Padding(
-                padding: EdgeInsets.all(16.0),
-                child: CircularProgressIndicator(),
-              ),
-            )
+            _buildClassesSkeleton()
           else if (_todayClasses.isEmpty)
             const Center(
               child: Padding(
@@ -723,6 +909,45 @@ class _StudentDashboardState extends State<StudentDashboard> {
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildClassesSkeleton() {
+    return Column(
+      children: List.generate(
+        2,
+        (index) => Padding(
+          padding: const EdgeInsets.only(bottom: 6.0),
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF8FAFC),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: const Color(0xFFE2E8F0), width: 1),
+            ),
+            child: Row(
+              children: [
+                _SkeletonLoading(height: 32, width: 4, borderRadius: 2),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _SkeletonLoading(
+                        height: 13,
+                        width: double.infinity,
+                        borderRadius: 2,
+                      ),
+                      const SizedBox(height: 2),
+                      _SkeletonLoading(height: 11, width: 100, borderRadius: 2),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -802,12 +1027,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
           ),
           const SizedBox(height: 12),
           if (_isLoadingRides)
-            const Center(
-              child: Padding(
-                padding: EdgeInsets.all(16.0),
-                child: CircularProgressIndicator(),
-              ),
-            )
+            _buildRidesSkeleton()
           else if (_recentRides.isEmpty)
             const Center(
               child: Padding(
@@ -868,6 +1088,59 @@ class _StudentDashboardState extends State<StudentDashboard> {
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildRidesSkeleton() {
+    return Column(
+      children: List.generate(
+        2,
+        (index) => Padding(
+          padding: const EdgeInsets.only(bottom: 6.0),
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF8FAFC),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: const Color(0xFFE2E8F0), width: 1),
+            ),
+            child: Row(
+              children: [
+                _SkeletonLoading(height: 32, width: 4, borderRadius: 2),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _SkeletonLoading(
+                        height: 13,
+                        width: double.infinity,
+                        borderRadius: 2,
+                      ),
+                      const SizedBox(height: 2),
+                      Row(
+                        children: [
+                          _SkeletonLoading(
+                            height: 9,
+                            width: 60,
+                            borderRadius: 3,
+                          ),
+                          const SizedBox(width: 6),
+                          _SkeletonLoading(
+                            height: 11,
+                            width: 40,
+                            borderRadius: 2,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -970,50 +1243,40 @@ class _StudentDashboardState extends State<StudentDashboard> {
     required Color color,
     required VoidCallback onTap,
   }) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.05),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: color.withValues(alpha: 0.2), width: 1),
+        border: Border.all(color: color.withValues(alpha: 0.2), width: 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(icon, color: color, size: 20),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(icon, color: color, size: 20),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: color,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                subtitle,
-                style: TextStyle(
-                  fontSize: 11,
-                  color: color.withValues(alpha: 0.7),
-                ),
-              ),
-            ],
+          const SizedBox(height: 12),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: color,
+            ),
           ),
-        ),
+          const SizedBox(height: 2),
+          Text(
+            subtitle,
+            style: TextStyle(fontSize: 11, color: color.withValues(alpha: 0.7)),
+          ),
+        ],
       ),
     );
   }
@@ -1114,10 +1377,19 @@ class _StudentDashboardState extends State<StudentDashboard> {
                         user.profilePhoto != null &&
                             user.profilePhoto!.isNotEmpty
                         ? _buildProfileImageDialog(user.profilePhoto!)
-                        : const Icon(
-                            Icons.person,
-                            size: 40,
-                            color: Colors.grey,
+                        : Container(
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [Colors.white, Color(0xFFE2E8F0)],
+                              ),
+                            ),
+                            child: const Icon(
+                              Icons.person,
+                              size: 40,
+                              color: Color(0xFF667eea),
+                            ),
                           ),
                   ),
                 ),
@@ -1485,7 +1757,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                       border: Border.all(color: Colors.white, width: 3),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.2),
+                          color: ColorUtils.blackWithOpacity20,
                           blurRadius: 10,
                           offset: const Offset(0, 4),
                         ),
@@ -1530,7 +1802,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                     user.email,
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.white.withValues(alpha: 0.8),
+                      color: ColorUtils.whiteWithOpacity80,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -1540,7 +1812,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                       'ID: ${user.studentId}',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.white.withValues(alpha: 0.7),
+                        color: ColorUtils.whiteWithOpacity70,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -2505,5 +2777,161 @@ ${userEmail ?? 'IIT Delhi OAE User'}
         );
       }
     }
+  }
+
+  // Add this helper method to avoid code duplication
+  Widget _buildDashboardContent(BuildContext context, UserModel user) {
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        children: [
+          // Welcome Card
+          _StaggeredAnimatedCard(
+            index: 0,
+            child: _buildWelcomeCard(context, user),
+          ),
+          const SizedBox(height: 24),
+
+          // Today's Classes Card
+          if (_todayClasses.isNotEmpty || _isLoadingClasses) ...[
+            _StaggeredAnimatedCard(
+              index: 1,
+              child: _buildTodayClassesCard(context),
+            ),
+            const SizedBox(height: 24),
+          ],
+
+          // Recent Rides Card
+          if (_recentRides.isNotEmpty || _isLoadingRides) ...[
+            _StaggeredAnimatedCard(
+              index: 2,
+              child: _buildRecentRidesCard(context),
+            ),
+            const SizedBox(height: 24),
+          ],
+
+          // Quick Actions Area
+          _StaggeredAnimatedCard(
+            index: 3,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 12,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
+              ),
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF667eea).withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(
+                          Icons.flash_on,
+                          color: Color(0xFF667eea),
+                          size: 20,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      const Text(
+                        'Quick Actions',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF2d3748),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _AnimatedCard(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const BookRideScreen(),
+                              ),
+                            );
+                          },
+                          semanticsLabel: 'Book a ride',
+                          child: _buildQuickActionCard(
+                            icon: Icons.directions_car,
+                            title: 'Book Ride',
+                            subtitle: 'Request a ride',
+                            color: const Color(0xFF10B981),
+                            onTap: () {},
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: _AnimatedCard(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const MyRidesScreen(),
+                              ),
+                            );
+                          },
+                          semanticsLabel: 'View ride history',
+                          child: _buildQuickActionCard(
+                            icon: Icons.history,
+                            title: 'My Rides',
+                            subtitle: 'View history',
+                            color: const Color(0xFF3B82F6),
+                            onTap: () {},
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _AnimatedCard(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const ClassScheduleScreen(),
+                              ),
+                            );
+                          },
+                          semanticsLabel: 'Manage class schedule',
+                          child: _buildQuickActionCard(
+                            icon: Icons.schedule,
+                            title: 'Class Schedule',
+                            subtitle: 'Manage classes',
+                            color: const Color(0xFF8B5CF6),
+                            onTap: () {},
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 20), // Bottom padding for scroll
+        ],
+      ),
+    );
   }
 }

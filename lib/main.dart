@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => app_auth.AuthProvider(),
       child: MaterialApp(
-        title: 'IIT Delhi OAE',
+        title: 'IITD OAE',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           colorScheme: const ColorScheme.light(

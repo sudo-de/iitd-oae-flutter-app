@@ -245,7 +245,9 @@ class ComplaintService {
             debugPrint('User data in DB: $userData');
             debugPrint('User role in DB: ${userData['role']}');
           }
-          return userData['role'] == 'admin';
+          // Check for different possible role formats
+          final role = userData['role'];
+          return role == 'admin' || role == 'UserRole.admin';
         }
       }
       if (kDebugMode) {
@@ -272,7 +274,7 @@ class ComplaintService {
         final userData = {
           'email': email,
           'name': name,
-          'role': 'admin',
+          'role': 'admin', // This matches UserModel.toMap() format
           'createdAt': Timestamp.fromDate(DateTime.now()),
         };
 
